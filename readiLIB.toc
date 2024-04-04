@@ -2,7 +2,7 @@
 ## Title: readiLIB by |cFF78B064readi2play|r 
 ## Notes: A little utility library for addons of the |cFF78B064readi2play|r family
 ## IconTexture:
-## Version: 0.5.8
+## Version: 0.0.7
 ## Author: |cFF78B064readi2play|r
 
 core.lua
