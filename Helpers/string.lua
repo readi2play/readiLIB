@@ -2,8 +2,9 @@
 -- BASICS
 --------------------------------------------------------------------------------
 READI.Helper.string = READI.Helper.string or {}
+RD.hlp.str = READI.Helper.string
 
-function READI.Helper.string:Split(str)
+function READI.Helper.string:GetWords(str)
   local words = {}
   for word in string.gmatch(str, "%w+") do table.insert(words, word) end
   return words
@@ -14,7 +15,7 @@ function READI.Helper.string.Capitalize(...)
   local str = select(1, ...)
   if size > 1 then str = select(2, ...) end
 
-  local words = READI.Helper.string:Split(str)
+  local words = READI.Helper.string:GetWords(str)
   for i=1, #words do
     words[i] = words[i]:gsub("^%l", string.upper)
   end

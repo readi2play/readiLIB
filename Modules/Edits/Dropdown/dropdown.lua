@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------------
 local AddonName, readi = ...
 --------------------------------------------------------------------------------
--- READI:CheckBox
+-- READI:DropDown
 --------------------------------------------------------------------------------
 -- A factory function for easily creating UI Checkboxes with Lua
 --
@@ -12,16 +12,16 @@ local AddonName, readi = ...
 -- * keyword [string] : A keyword used for custom event registration
 --
 ---@param opts table:
--- * onClick [function] : Callback function for what to happen when the button is clicked
+-- * values [table] : A table, representing the values of the dropdown list
+-- * selected [string] : the currently selected value
+-- * onChange [function] : Callback function for what to happen when the button is clicked
+-- * name (optional) [string] : The name the created frame should have (defaults to: nil)
+-- * region (optional) [frame] : The frame the new one should relate to (defaults to: nil)
+-- * template (optional) [string] : The Template that should be used for creating the button (defaults to: "UIDropDownMenuTemplate")
+-- * width (optional) [number] : The element's width in pixel (defaults to 200)
 -- * anchor (optional) [string] : The positioning anchor of the new frame (defaults to "TOPLEFT")
 -- * offsetX (optional) [number] : The x-axis offset of the created frame (defaults to: 0)
 -- * offsetY (optional) [number] : The y-axis offset of the created frame (defaults to: 0)
--- * name (optional) [string] : The name the created frame should have (defaults to: nil)
--- * region (optional) [frame] : The frame the new one should relate to (defaults to: nil)
--- * template (optional) [string] : The Template that should be used for creating the button (defaults to: "InterfaceOptionsCheckButtonTemplate")
--- * label (optional) [string] : The text that should appear on the button (defaults to: "")
--- * text (optional) [string] : An additional text to be conditionally shown below the button (defaults to: "")
--- * condition (optional) [boolean] : the condition for the additional text (defaults to: false)
 -- * enabled (optional) [boolean] : determine if the button should be enabled (true) or disabled (false) (defaults to: true)
 -- * colors (optional) [table] : the color table to be used for different enabled and disabled state of the checkbox (defaults to <LIB>.Colors)
 -- * enabled_color (optional) [string] : the label color of enabled checkboxes (defaults to "white")
@@ -29,13 +29,11 @@ local AddonName, readi = ...
 -- * parent (optional) [frame] : The frame the new one should be positioned relative to
 -- * p_anchor (optional) [string] : The anchor point of the parent frame (defaults to: "BOTTOMLEFT")
 -- * onReset (optional) [function] : Callback function for what to happen when the current window's editables are reset to default 
--- * onClear (optional) [function] : Callback function for what to happen when an UnselectAll event fires
--- * onSelectAll (optional) [function] : Callback function for what to happen when a SelectAll event fires
-function READI:CheckBox(data, opts)
+function READI:DropDown(data, opts)
   --------------------------------------------------------------------------------
-  -- Error Handling
+  -- ERROR HANDLING
   --------------------------------------------------------------------------------
-  -- return early and throw an informative error message when ...
+    -- return early and throw an informative error message when ...
   -- ... the 'data' argument is nil
   if not data then
     error([=[
@@ -59,61 +57,61 @@ function READI:CheckBox(data, opts)
   if not opts then
     error([=[
       Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:
-      ["onClick"] which is a function (not a function's result)
+      ["onChange"] which is a function (not a function's result)
     ]=], 2)
     return 
   end
-
   --------------------------------------------------------------------------------
-  -- default values
+  -- SETTING DEFAULTS
   --------------------------------------------------------------------------------
   local set = {
+    storage = {},
     name = nil,
     region = nil,
-    template = "InterfaceOptionsCheckButtonTemplate",
-    label = "",
-    text = "",
-    condition = false,
-    enabled = true,
-    colors = READI.Colors,
-    enabled_color = "white",
-    disabled_color = "grey",
+    template = "UIDropDownMenuTemplate",
+    width = 200,
     anchor = "TOPLEFT",
     parent = nil,
     p_anchor = "BOTTOMLEFT",
     offsetX = 0,
     offsetY = 0,
+    enabled = true,
     onReset = function() end,
-    onClear = function() end,
-    onSelectAll = function() end,
   }
   READI.Helper.table:Merge(set, opts)
-
   --------------------------------------------------------------------------------
-  -- Creating the checkbox
+  -- CREATING THE FRAME
   --------------------------------------------------------------------------------
-  local cb = _G[set.name] or CreateFrame("CheckButton", set.name, set.region, set.template)
-  cb:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
+  local dd = _G[set.name] or CreateFrame("Frame", set.name, set.region, set.template) 
+  dd:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
+  
+  UIDropDownMenu_SetWidth(dd, set.width)
+  UIDropDownMenu_SetText(dd, set.storage[set.option])
 
-  function cb:SetState(enabled)
-    if enabled == nil then enabled = true end
-    cb.Text:SetText(nil)
-    if enabled then
-      cb:Enable()
-      cb.Text:SetText( READI.Helper.color:Get(set.enabled_color, set.colors, set.label) )
-    else
-      cb:Disable()
-      cb.Text:SetText( READI.Helper.color:Get(set.disabled_color, set.colors, set.label) )
+  UIDropDownMenu_Initialize(dd, function(self, level)
+    local info = UIDropDownMenu_CreateInfo()
+    if (level or 1) == 1 then
+      for i,v in ipairs(set.values) do
+        info.text, info.arg1, info.checked = gsub(v, "_", " "), v, v == set.storage[set.option]
+        info.func = function(self, arg1, arg2, checked)
+          set.storage[set.option] = self.value
+          UIDropDownMenu_SetText(dd, self.value)
+          self.checked = true
+          EventRegistry:TriggerEvent(format("%s.%s.%s", data.addon, data.keyword, "OnChange"))
+        end
+        UIDropDownMenu_AddButton(info)
+      end
     end
+  end)
+
+  if not set.enabled then
+    UIDropDownMenu_DisableDropDown(dd)
+  else
+    UIDropDownMenu_EnableDropDown(dd)
   end
-
-  cb:HookScript("OnClick", set.onClick)
-  --------------------------------------------------------------------------------
-  -- Register Custom Events
-  --------------------------------------------------------------------------------
+  
   EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnReset"), set.onReset)
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnClear"), set.onClear)
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnSelectAll"), set.onSelectAll)
+  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnChange"), set.onChange)
 
-  return cb
+  return dd
 end

@@ -2,6 +2,7 @@
 -- BASICS
 --------------------------------------------------------------------------------
 READI.Helper.color = READI.Helper.color or {}
+RD.hlp.col = READI.Helper.color 
 
 function READI.Helper.color:Get(name, table, ...)
   table = table or READI.Colors

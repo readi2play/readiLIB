@@ -2,6 +2,7 @@
 -- BASICS
 --------------------------------------------------------------------------------
 READI.Helper.table = READI.Helper.table or {}
+RD.hlp.tbl = READI.Helper.table
 --------------------------------------------------------------------------------
 -- READI.Helper.table:Get()
 --------------------------------------------------------------------------------
@@ -82,7 +83,7 @@ end
 --------------------------------------------------------------------------------
 --- A simple function to merge values of several source tables into one dist table 
 ---@param dst table : the table the other tables should be merged into
----@param args tables : a variable number of tables to be merged into dst
+---@param args table : a variable number of tables to be merged into dst
 function READI.Helper.table:Merge(dst, ...)
   if type(dst) ~= "table" then dst = {} end
   local size = select("#", ...)
@@ -132,3 +133,41 @@ function READI.Helper.table:CleanUp(master, servant)
 
   return servant
 end
+--------------------------------------------------------------------------------
+-- READI.Helper.table.Serialize()
+--------------------------------------------------------------------------------
+function READI.Helper.table:Serialize(val, name, skipnewlines, depth)
+  skipnewlines = skipnewlines or false
+  depth = depth or 0
+
+  local tmp = string.rep("  ", depth)
+
+  if name then
+    if not string.match(name, '^\w*$') then
+      name = string.gsub(name, "'", "\\'")
+      name = "['"..name.."']"
+    end
+    tmp = tmp .. name .. " = "
+  end
+
+  if type(val) == "table" then
+    tmp = tmp .. "{"..(not skipnewlines and "\n" or "")
+    for k,v in pairs(val) do
+      tmp = tmp..READI.Helper.table:Serialize(v,k, skipnewlines, depth + 1) .. "," .. (not skipnewlines and "\n" or "")
+    end
+    tmp = tmp .. string.rep("  ", depth) .. "}"
+  elseif type(val) == "number" then
+    tmp = tmp .. tostring(val)
+  elseif type(val) == "string" then
+    tmp = tmp .. format("%q", val)
+  elseif type(val) == "boolean" then
+    tmp = tmp .. (val and "true" or "false")
+  else
+    tmp = tmp .. "\"[inserializable data-type: " .. type(val) .. "]\""
+  end
+
+  return tmp
+end
+--------------------------------------------------------------------------------
+-- READI.Helper.table.Deserialize()
+--------------------------------------------------------------------------------
