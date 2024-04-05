@@ -17,13 +17,14 @@ Localization/itIT.lua
 Debug/debug.lua
 
 # Color Schema
-# Colors/colors.lua
+Colors/colors.lua
 
 # Helpers
 Helpers/helpers.lua
 Helpers/locales.lua
 Helpers/string.lua
 Helpers/table.lua
+Helpers/color.lua
 
 # Textures
 # Textures/textures.lua
