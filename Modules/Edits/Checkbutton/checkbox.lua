@@ -1,15 +1,15 @@
 --------------------------------------------------------------------------------
 -- BASICS
 --------------------------------------------------------------------------------
-local AddonName, b2h = ...
+local AddonName, readi = ...
 --------------------------------------------------------------------------------
--- READI:Button
+-- READI:CheckBox
 --------------------------------------------------------------------------------
--- A simple factory function for easily creating UI Buttons with Lua
+-- A factory function for easily creating UI Checkboxes with Lua
 --
 ---@param data table:
 -- * addon [string] : A string representing the addon that uses this library function, could be the name or an abbreviation
--- * keyword [string] : The keyword within the data storage to address
+-- * keyword [string] : A keyword used for custom event registration
 --
 ---@param opts table:
 -- * onClick [function] : Callback function for what to happen when the button is clicked
@@ -23,14 +23,16 @@ local AddonName, b2h = ...
 -- * text (optional) [string] : An additional text to be conditionally shown below the button (defaults to: "")
 -- * condition (optional) [boolean] : the condition for the additional text (defaults to: false)
 -- * enabled (optional) [boolean] : determine if the button should be enabled (true) or disabled (false) (defaults to: true)
+-- * colors (optional) [table] : the color table to be used for different enabled and disabled state of the checkbox (defaults to <LIB>.Colors)
+-- * enabled_color (optional) [string] : the label color of enabled checkboxes (defaults to "white")
+-- * disabled_color (optional) [string] : the label color of disabled checkboxes (defaults to "grey")
 -- * parent (optional) [frame] : The frame the new one should be positioned relative to
 -- * p_anchor (optional) [string] : The anchor point of the parent frame (defaults to: "BOTTOMLEFT")
--- * width (optional) [number] : The button's width (defaults to TextWidth + 30, respectively to 130 if no text is set)
--- * height (optional) [number] : The button's height (defaults to TextHeight + 10, respectively to 22 if no text is set)
--- * onReset (optional) [function] : Callback function for what to happen when the current window's editables are reset 
--- * onClear (optional) [function] : Callback function for what to happen when all fields within the window are cleared
-function READI:Button(data, opts)
-  --------------------------------------------------------------------------------
+-- * onReset (optional) [function] : Callback function for what to happen when the current window's editables are reset to default 
+-- * onClear (optional) [function] : Callback function for what to happen when an UnselectAll event fires
+-- * onSelectAll (optional) [function] : Callback function for what to happen when a SelectAll event fires
+function READI:CheckBox(data, opts)
+    --------------------------------------------------------------------------------
   -- Error Handling
   --------------------------------------------------------------------------------
   -- return early and throw an informative error message when ...
@@ -48,9 +50,9 @@ function READI:Button(data, opts)
     error("Invalid addon name or abbreviation. Please provide a valid addon name or abbreviation (e.g. 'MFA' for 'My Fancy Addon*')", 2)
     return
   end
-  -- ... no data storage key has been given
+  -- ... no keyword has been given
   if not data.keyword then
-    error("No data storage keyword given. Please provide a data storage keyword to look at.", 2)
+    error("No keyword given. Please provide a keyword for event registration.", 2)
     return
   end
   -- ... the 'opts' argument is nil
@@ -68,54 +70,49 @@ function READI:Button(data, opts)
   local set = {
     name = nil,
     region = nil,
-    template = "UIPanelButtonTemplate",
+    template = "InterfaceOptionsCheckButtonTemplate",
     label = "",
     text = "",
     condition = false,
     enabled = true,
+    colors = READI.Colors,
+    enabled_color = "white",
+    disabled_color = "grey",
     anchor = "TOPLEFT",
     parent = nil,
     p_anchor = "BOTTOMLEFT",
     offsetX = 0,
     offsetY = 0,
-    width = nil,
-    height = nil,
     onReset = function() end,
-    onClear = function() end
+    onClear = function() end,
+    onSelectAll = function() end,
   }
   READI.Helper.table:Merge(set, opts)
 
   --------------------------------------------------------------------------------
-  -- Creating the button
+  -- Creating the checkbox
   --------------------------------------------------------------------------------
-  local btn = _G[set.name] or CreateFrame("Button", set.name, set.region, set.template)
-  if set.parent and set.p_anchor then
-    btn:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
-  else
-    btn:SetPoint(set.anchor, set.offsetX, set.offsetY)
-  end
-  
-  if set.label then btn:SetText(set.label) end
-  btn:SetWidth(set.width or (btn:GetTextWidth() or 100) + 30)
-  btn:SetHeight(set.height or (btn:GetTextHeight() or 22) + 10)
+  local cb = _G[set.name] or CreateFrame("CheckButton", set.name, set.region, set.template)
+  cb:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
 
-  btn:SetScript("OnClick", set.onClick)
+  function cb:SetState(enabled)
+    if enabled == nil then enabled = true end
+    cb.Text:SetText(nil)
 
-  if set.text and set.text ~= "" then
-    local conText = set.region:CreateFontString("ARTWORK", nil, "GameFontHighlight")
-    conText:SetPoint("TOP", btn, "BOTTOM", 0, -5)
-    conText:SetText(text)
-    conText:Hide()
+    if enabled then
+      cb.Text:SetText( READI.Helper.color:Get(set.enabled_color, set.colors, set.label) )
+    else
+      cb.Text:SetText( READI.Helper.color:Get(set.disabled_color, set.colors, set.label) )
+    end
   end
 
-  if set.condition then set.conText:Show() end
-  if not set.enabled then btn:Disable() end
-
+  cb:HookScript("OnClick", set.onClick)
   --------------------------------------------------------------------------------
   -- Register Custom Events
   --------------------------------------------------------------------------------
   EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnReset"), set.onReset)
   EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnClear"), set.onClear)
+  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnSelectAll"), set.onSelectAll)
 
-  return btn
+  return cb
 end

@@ -2,7 +2,7 @@
 ## Title: readiLIB by |cFF78B064readi2play|r 
 ## Notes: A little utility library for addons of the |cFF78B064readi2play|r family
 ## IconTexture:
-## Version: 0.0.7
+## Version: 0.1.1
 ## Author: |cFF78B064readi2play|r
 
 core.lua
@@ -17,16 +17,18 @@ Localization/itIT.lua
 Debug/debug.lua
 
 # Color Schema
-# Colors/colors.lua
+Colors/colors.lua
 
 # Helpers
 Helpers/helpers.lua
 # Helpers/locales.lua
 Helpers/string.lua
 Helpers/table.lua
+Helpers/color.lua
 
 # Textures
 # Textures/textures.lua
 
 # Modules
+Modules/Edits/Checkbutton/checkbox.lua
 Modules/Edits/Button/button.lua
