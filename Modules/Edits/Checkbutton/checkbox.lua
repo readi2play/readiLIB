@@ -63,6 +63,7 @@ function READI:CheckBox(data, opts)
     ]=], 2)
     return 
   end
+
   --------------------------------------------------------------------------------
   -- default values
   --------------------------------------------------------------------------------
@@ -97,7 +98,6 @@ function READI:CheckBox(data, opts)
   function cb:SetState(enabled)
     if enabled == nil then enabled = true end
     cb.Text:SetText(nil)
-    
     if enabled then
       cb:Enable()
       cb.Text:SetText( READI.Helper.color:Get(set.enabled_color, set.colors, set.label) )

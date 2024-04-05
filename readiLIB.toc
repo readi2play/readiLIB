@@ -1,13 +1,8 @@
 ## Interface: 100206
 ## Title: readiLIB by |cFF78B064readi2play|r 
 ## Notes: A little utility library for addons of the |cFF78B064readi2play|r family
-<<<<<<< Updated upstream
-## IconTexture:
-## Version: 0.0.7
-=======
 ## IconTexture: Interface\AddOns\readiLIB\media\readiLIB_logo.tga
-## Version: 0.1.1
->>>>>>> Stashed changes
+## Version: 0.2.1
 ## Author: |cFF78B064readi2play|r
 
 core.lua
@@ -22,21 +17,19 @@ Localization/itIT.lua
 Debug/debug.lua
 
 # Color Schema
-# Colors/colors.lua
+Colors/colors.lua
 
 # Helpers
 Helpers/helpers.lua
 Helpers/locales.lua
 Helpers/string.lua
 Helpers/table.lua
+Helpers/color.lua
 
 # Textures
 # Textures/textures.lua
 
 # Modules
-<<<<<<< Updated upstream
-=======
 Modules/Edits/Checkbutton/checkbox.lua
 Modules/Edits/Dropdown/dropdown.lua
->>>>>>> Stashed changes
 Modules/Edits/Button/button.lua

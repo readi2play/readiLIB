@@ -104,14 +104,11 @@ function READI:Button(data, opts)
   if set.condition then set.conText:Show() end
   if not set.enabled then btn:Disable() end
 
-  local resetFunc = set.onReset or function() return end
-  local clearFunc = set.onClear or function() return end
-
   --------------------------------------------------------------------------------
   -- Register Custom Events
   --------------------------------------------------------------------------------
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnReset"), resetFunc)
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnClear"), clearFunc)
+  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnReset"), set.onReset)
+  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnClear"), set.onClear)
 
   return btn
 end
