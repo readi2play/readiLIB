@@ -1,4 +1,6 @@
 local _, readi = ...
 
-READI.L = READI.L or {}
-READI.L.deDE = {}
+READI.Localization = READI.Localization or {}
+RD.L10N = READI.Localization
+
+READI.Localization.deDE = {}
