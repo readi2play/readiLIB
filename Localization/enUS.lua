@@ -16,9 +16,50 @@ READI.Localization.enUS = {
     },
     ["button"] = {
       ["opts_is_nil"] = [=[
-        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:
-        ["onClick"] which is a function (not a function's result)
+        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:\n\t
+        onClick [function]
       ]=],
+    },
+    ["checkbox"] = {
+      ["opts_is_nil"] = [=[
+        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:\n\t
+        onClick [function]\n\t
+      ]=],
+    },
+    ["radiobutton"] = {
+      ["opts_is_nil"] = [=[
+        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:\n\t
+        onClick [function]\n\t
+      ]=],
+    },
+    ["slider"] = {
+      ["opts_is_nil"] = [=[
+        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:\n\t
+        onChange [function]\n\t
+      ]=],
+    },
+    ["editbox"] = {
+      ["opts_is_nil"] = [=[
+        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:\n\t
+        onChange [function]\n\t
+      ]=],
+    },
+    ["dropdown"] = {
+      ["opts_is_nil"] = [=[
+        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:\n\t
+        onChange [function] :\n\t
+        values [table] : the index based list of options within the dropdown\n\t
+        selected [string] : the initially selected value
+      ]=],
+    },
+    ["panel"] = {
+      ["opts_is_nil"] = [=[
+        Invalid required argument "opts". Please provide a valid table with at least the following attributes in it:\n\t
+        onChange [function] :\n\t
+        values [table] : the index based list of options within the dropdown\n\t
+        selected [string] : the initially selected value
+      ]=],
+      ["no_name_given"] = "No name has been given. Please provide a name for the panel to create."
     }
   }
 }
