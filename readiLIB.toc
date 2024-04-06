@@ -34,4 +34,5 @@ Modules/Edits/Checkbutton/checkbox.lua
 Modules/Edits/Dropdown/dropdown.lua
 Modules/Edits/Button/button.lua
 
+Modules/Frames/optionPanel.lua
 Modules/Icons/icon.lua
