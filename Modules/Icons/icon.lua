@@ -55,7 +55,14 @@ local AddonName, readi = ...
   --------------------------------------------------------------------------------
   -- CREATE THE ICON
   --------------------------------------------------------------------------------
-  local icon = CreateFrame("Frame", set.name, set.region)
+  local icon = nil
+  if set.name and set.region then
+    icon = CreateFrame("Frame", set.name, set.region)
+  elseif not set.region then
+    icon = CreateFrame("Frame", set.name)
+  else
+    icon = CreateFrame("Frame")
+  end
   icon:SetSize(set.width, set.height)
   icon.tex = icon:CreateTexture()
   icon.tex:SetAllPoints(icon)

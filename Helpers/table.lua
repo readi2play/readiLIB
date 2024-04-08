@@ -4,22 +4,26 @@
 READI.Helper.table = READI.Helper.table or {}
 RD.hlp.tbl = READI.Helper.table
 --------------------------------------------------------------------------------
--- READI.Helper.table:Get()
---------------------------------------------------------------------------------
 --- A simple function to retrieve a key-value-pair out of a table based on a
 --- callback function (similar to READI.Helper.table:Filter)
 ---@param tbl table
 ---@param handler function
 function READI.Helper.table:Get(tbl, handler)
-  for i=1, select("#", tbl) do
-    if handler(tbl[i]) then
-      return i,tbl[i]
+  if #tbl then
+    for i=1, #tbl do
+      if handler(tbl[i]) then
+        return i,tbl[i]
+      end
+    end
+  else
+    for k,v in pairs(tbl) do
+      if handler(k) then
+        return k,v
+      end
     end
   end
   return nil
 end
---------------------------------------------------------------------------------
--- READI.Helper.table:Keys()
 --------------------------------------------------------------------------------
 --- A simple function to retrieve all keys out of a table 
 ---@param tbl table
@@ -30,8 +34,6 @@ function READI.Helper.table:Keys(tbl)
   end
   return dst
 end
---------------------------------------------------------------------------------
--- READI.Helper.table:Contains()
 --------------------------------------------------------------------------------
 -- Check whether a given value is contained within a table
 ---@param needle string|number|boolean
@@ -44,8 +46,6 @@ function READI.Helper.table:Contains(needle, haystack)
   end
   return false
 end
---------------------------------------------------------------------------------
--- READI.Helper.table:Chunk()
 --------------------------------------------------------------------------------
 --- Split a given table in chunks of a given size
 ---@param tbl table
@@ -64,8 +64,6 @@ function READI.Helper.table:Chunk(tbl, size)
   end
 end
 --------------------------------------------------------------------------------
--- READI.Helper.table:Filter()
---------------------------------------------------------------------------------
 --- A simple function to filter a given table based on a callback function
 ---@param tbl table
 ---@param handler function
@@ -78,8 +76,6 @@ function READI.Helper.table:Filter(tbl, handler)
   end
   return out
 end
---------------------------------------------------------------------------------
--- READI.Helper.table:Merge()
 --------------------------------------------------------------------------------
 --- A simple function to merge values of several source tables into one dist table 
 ---@param dst table : the table the other tables should be merged into
@@ -102,8 +98,6 @@ function READI.Helper.table:Merge(dst, ...)
   end
   return dst  
 end
---------------------------------------------------------------------------------
--- READI.Helper.table:Normalize()
 --------------------------------------------------------------------------------
 --- A simple function to normalize a given table according to another (master)
 --- The given table will be changed to represent the same set of keys
@@ -133,8 +127,6 @@ function READI.Helper.table:CleanUp(master, servant)
 
   return servant
 end
---------------------------------------------------------------------------------
--- READI.Helper.table.Serialize()
 --------------------------------------------------------------------------------
 function READI.Helper.table:Serialize(val, name, skipnewlines, depth)
   skipnewlines = skipnewlines or false
@@ -169,5 +161,23 @@ function READI.Helper.table:Serialize(val, name, skipnewlines, depth)
   return tmp
 end
 --------------------------------------------------------------------------------
--- READI.Helper.table.Deserialize()
---------------------------------------------------------------------------------
+--- a simple function to check if a series of nested tables exists
+---@param tbl table : the table to verify
+---@param key string : a string representation of a series of nested tables (e.g. "path.to.nested.tables")
+function READI.Helper.table:VerifyDepth(tbl, key, lvl)
+  lvl = (lvl or 0) + 1
+  -- split the key string by its path separator
+  local depths = READI.Helper.string:Split(key,".")
+  -- return early if we reach the maximum depth of the key string
+  if #depths == 0 then return true end
+  -- recursive recall of the function for each level within the table
+  if tbl[depths[1]] and tbl[depths[1]] ~= {} then
+    -- remove the already checked level to prevent errors
+    local _ = table.remove(depths,1)
+    -- update the table to be given to the next function call
+    tbl = tbl[_]
+    -- return the result of the next levels check
+    return READI.Helper.table:VerifyDepth(tbl, table.concat(depths,"."), lvl)
+  end
+  return false
+end

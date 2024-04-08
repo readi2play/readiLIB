@@ -94,14 +94,15 @@ function READI:Button(data, opts)
 
   btn:SetScript("OnClick", set.onClick)
 
+  local conText = set.region:CreateFontString("ARTWORK", nil, "GameFontHighlight")
+  conText:SetPoint("TOP", btn, "BOTTOM", 0, -5)
+  conText:Hide()
+
   if set.text and set.text ~= "" then
-    local conText = set.region:CreateFontString("ARTWORK", nil, "GameFontHighlight")
-    conText:SetPoint("TOP", btn, "BOTTOM", 0, -5)
-    conText:SetText(text)
-    conText:Hide()
+    conText:SetText(set.text)
   end
 
-  if set.condition then set.conText:Show() end
+  if set.condition then conText:Show() end
   if not set.enabled then btn:Disable() end
 
   --------------------------------------------------------------------------------

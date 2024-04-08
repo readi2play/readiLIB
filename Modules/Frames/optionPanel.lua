@@ -50,7 +50,6 @@ function READI:OptionPanel(data, opts)
   local set = {
     parent = nil,
     title = nil,
-    callback = nil,
   }  
   READI.Helper.table:Merge(set, opts)
 
@@ -67,15 +66,20 @@ function READI:OptionPanel(data, opts)
   container:SetPoint("BOTTOMRIGHT", -5, 5)
 
   -- if the panel is not meant to be the main config panel for the addon set its name or title as headline
-  local headline = nil
-  if set.title then
-    headline = container:CreateFontString("ARTWORK", nil, set.title.template)
+  local anchorline = nil
+  if set.parent then
+    local __txt = set.name
+    if set.title then __txt = set.title.text end
+
+    local headline = container:CreateFontString("ARTWORK", nil, set.title.template or "GameFontHighlightLarge")
     headline:SetPoint("TOP", container, 0, -20)
-    headline:SetText(READI:color(set.title.text, set.title.color))
+    headline:SetText(READI.Helper.color:Get(set.title.color, data.colors, __txt))
+
+    anchorline = CreateFrame("Frame")
+    anchorline:SetPoint("TOP", headline, "BOTTOM", 0,0)
+    anchorline:SetPoint("LEFT", container, "LEFT", 0, 0)
+    anchorline:SetPoint("RIGHT", container, "RIGHT", 0, 0)
   end
 
-  -- run the given callback
-  if set.callback then set.callback(self, panel, container, headline) end
-
-  return panel
+  return panel, container, anchorline
 end
