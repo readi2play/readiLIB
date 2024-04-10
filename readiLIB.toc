@@ -2,10 +2,16 @@
 ## Title: readiLIB by |cFF78B064readi2play|r 
 ## Notes: A small utility library for addons of the |cFF78B064readi2play|r family
 ## IconTexture: Interface\AddOns\readiLIB\media\readiLIB_logo.tga
-## Version: 0.2.4
+## Version: 0.4.2
 ## Author: |cFF78B064readi2play|r
 
 core.lua
+
+# Error Handling
+Modules/Errors/errors.lua
+
+# Texturing
+Modules/Textures/textures.lua
 
 # Localization
 Localization/enUS.lua
@@ -30,9 +36,12 @@ Helpers/color.lua
 # Textures/textures.lua
 
 # Modules
-Modules/Edits/Checkbutton/checkbox.lua
-Modules/Edits/Dropdown/dropdown.lua
 Modules/Edits/Button/button.lua
-
+Modules/Edits/Checkbutton/checkbox.lua
+Modules/Edits/RadioButton/radiobutton.lua
+Modules/Edits/EditBox/editbox.lua
+Modules/Edits/Dropdown/dropdown.lua
+Modules/Edits/Slider/slider.lua
+Modules/FrameSelector/frameSelector.lua
 Modules/Frames/optionPanel.lua
 Modules/Icons/icon.lua

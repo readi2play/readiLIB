@@ -1,4 +1,4 @@
-local _, readi = ...
+local _, rdl = ...
 
 READI.Localization = READI.Localization or {}
 RD.L10N = READI.Localization
@@ -12,7 +12,7 @@ READI.Localization.deDE = {
         unselectAll = "Alles abwählen",
         selectAll = "Alles auswählen",
         cancel = "Abbrechen",
-        okay = "Okay",
+        okay = "OK",
         submit = "Bestätigen",
       }
     },
@@ -28,6 +28,11 @@ READI.Localization.deDE = {
         one = "Benachrichtigung",
         some = "Benachrichtigungen"
       }
+    },
+    tooltips = {
+      buttons = {
+        frameSelector = "Frame auswählen",
+      },
     },
   },
 }

@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- BASICS
 --------------------------------------------------------------------------------
-local AddonName, readi = ...
+local AddonName, rdl = ...
 --------------------------------------------------------------------------------
 -- READI:Icon
 --------------------------------------------------------------------------------
@@ -16,32 +16,7 @@ local AddonName, readi = ...
   --------------------------------------------------------------------------------
   -- ERROR HANDLING
   --------------------------------------------------------------------------------
-  -- return early and throw an informative error message when ...
-  -- ... the 'data' argument is nil
-  if not data then
-    error(READI:l10n("errors.general.data_is_nil"), 2)
-    return 
-  end
-  -- ... no addon abbreviation was provided
-  if not data.addon or data.addon == "" then
-    error(READI:l10n("errors.general.invalid_addonname_or_abbreviation"), 2)
-    return
-  end
-  -- ... no data storage key has been given
-  if not data.keyword then
-    error(READI:l10n("errors.general.no_data_storage"), 2)
-    return
-  end
-  -- ... the 'opts' argument is nil
-  if not opts then
-    error(READI:l10n("errors.panel.opts_is_nil"), 2)
-    return 
-  end
-  -- ... no name has been given
-  if not opts.texture then
-    error(READI:l10n("errors.icon.no_texture_set"), 2)
-    return 
-  end
+  READI.Helper.table:Merge(set, opts, "icon", "texture")
   --------------------------------------------------------------------------------
   -- DEFINE DEFAULT VALUES
   --------------------------------------------------------------------------------
@@ -67,6 +42,8 @@ local AddonName, readi = ...
   icon.tex = icon:CreateTexture()
   icon.tex:SetAllPoints(icon)
   icon.tex:SetTexture(set.texture)
+
+  icon.tex:SetRotation(math.pi * 2)
   
   return icon
 end
