@@ -35,3 +35,6 @@ function READI.Helper.string:Trim(str)
   end
   return table.concat(trimmed, "\n")
 end
+function READI.Helper.string.Contains(str, pat)
+  return string.find(str, pat) ~= nil
+end

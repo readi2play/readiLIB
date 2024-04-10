@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- BASICS
 --------------------------------------------------------------------------------
-local AddonName, readi = ...
+local AddonName, rdl = ...
 --------------------------------------------------------------------------------
 -- READI:Button
 --------------------------------------------------------------------------------
@@ -33,28 +33,7 @@ function READI:Button(data, opts)
   --------------------------------------------------------------------------------
   -- Error Handling
   --------------------------------------------------------------------------------
-  -- return early and throw an informative error message when ...
-  -- ... the 'data' argument is nil
-  if not data then
-    error(READI:l10n("errors.general.data_is_nil"), 2)
-    return 
-  end
-  -- ... no addon abbreviation was provided
-  if not data.addon or data.addon == "" then
-    error(READI:l10n("errors.general.invalid_addonname_or_abbreviation"), 2)
-    return
-  end
-  -- ... no data storage key has been given
-  if not data.keyword then
-    error(READI:l10n("errors.general.no_data_storage"), 2)
-    return
-  end
-  -- ... the 'opts' argument is nil
-  if not opts then
-    error(READI:l10n("errors.button.opts_is_nil"), 2)
-    return 
-  end
-
+  READI:CheckFactoryParams(data, opts, "button", "onClick")
   --------------------------------------------------------------------------------
   -- default values
   --------------------------------------------------------------------------------
@@ -63,6 +42,7 @@ function READI:Button(data, opts)
     region = nil,
     template = "UIPanelButtonTemplate",
     label = "",
+    tooltip = nil,
     text = "",
     condition = false,
     enabled = true,
@@ -92,7 +72,20 @@ function READI:Button(data, opts)
   btn:SetWidth(set.width or (btn:GetTextWidth() or 100) + 30)
   btn:SetHeight(set.height or (btn:GetTextHeight() or 22) + 10)
 
-  btn:SetScript("OnClick", set.onClick)
+  btn.tooltip = CreateFrame("GameTooltip", format("%sTooltip", set.name), UIParent, "GameTooltipTemplate")
+
+  local function OnEnter(self)
+    if not set.tooltip then return end
+    self.tooltip:SetOwner(self, "ANCHOR_LEFT")
+    self.tooltip:ClearLines()
+    self.tooltip:AddLine(set.tooltip, 1, 1, 1, false)
+    self.tooltip:Show()
+  end
+
+  local function OnLeave(self)
+    if not set.tooltip then return end
+    self.tooltip:Hide()
+  end
 
   local conText = set.region:CreateFontString("ARTWORK", nil, "GameFontHighlight")
   conText:SetPoint("TOP", btn, "BOTTOM", 0, -5)
@@ -108,8 +101,12 @@ function READI:Button(data, opts)
   --------------------------------------------------------------------------------
   -- Register Custom Events
   --------------------------------------------------------------------------------
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnReset"), set.onReset)
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.addon, data.keyword, "OnClear"), set.onClear)
+  btn:SetScript("OnClick", set.onClick)
+  btn:SetScript("OnEnter", OnEnter)
+  btn:SetScript("OnLeave", OnLeave)
+
+  EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnReset"), set.onReset)
+  EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnClear"), set.onClear)
 
   return btn
 end
