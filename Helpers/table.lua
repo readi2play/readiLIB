@@ -21,8 +21,11 @@ end
 ---@param tbl table
 function READI.Helper.table:Keys(tbl)
   local dst = {}
-  for k,v in pairs(tbl) do
-    table.insert(dst, k)
+
+  if (type(tbl) or false) == "table" then
+    for k,v in pairs(tbl) do
+      table.insert(dst, k)
+    end
   end
   return dst
 end
@@ -100,17 +103,14 @@ function READI.Helper.table:CleanUp(master, servant)
   end
 
   for k,v in pairs(servant) do
-    if type(v) == "table" then
-      print("Sub Table reached at ", k)
+    if (type(v) or false) == "table" then
       if master[k] ~= nil then
         servant[k] = READI.Helper.table:CleanUp(master[k], v)
       else
         servant[k] = nil
       end
     else
-      print(k)
       if master[k] == nil then
-        print("clear missing value at ", k)
         servant[k] = nil
       end
     end
