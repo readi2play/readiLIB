@@ -9,17 +9,9 @@ RD.hlp.tbl = READI.Helper.table
 ---@param tbl table
 ---@param handler function
 function READI.Helper.table:Get(tbl, handler)
-  if #tbl then
-    for i=1, #tbl do
-      if handler(tbl[i]) then
-        return i,tbl[i]
-      end
-    end
-  else
-    for k,v in pairs(tbl) do
-      if handler(k) then
-        return k,v
-      end
+  for k,v in pairs(tbl) do
+    if handler(k,v) then
+      return k,v
     end
   end
   return nil
