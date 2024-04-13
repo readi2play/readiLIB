@@ -37,7 +37,7 @@ function READI:EditBox(data, opts)
   --------------------------------------------------------------------------------
   -- DEFINE DEFAULTS
   --------------------------------------------------------------------------------
-  local set = {
+  local set = READI.Helper.table:Merge({
     name = nil,
     region = nil,
     type = "text",
@@ -55,8 +55,7 @@ function READI:EditBox(data, opts)
     showButtons = true,
     okayForNumber = false,
     onReset = function() end,
-  }
-  READI.Helper.table:Merge(set,opts)
+  },opts)
   --------------------------------------------------------------------------------
   -- CREATING THE FRAME
   --------------------------------------------------------------------------------

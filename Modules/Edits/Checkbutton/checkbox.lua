@@ -40,7 +40,7 @@ function READI:CheckBox(data, opts)
   --------------------------------------------------------------------------------
   -- default values
   --------------------------------------------------------------------------------
-  local set = {
+  local set = READI.Helper.table:Merge({
     name = nil,
     region = nil,
     template = "InterfaceOptionsCheckButtonTemplate",
@@ -58,8 +58,7 @@ function READI:CheckBox(data, opts)
     onReset = function() end,
     onClear = function() end,
     onSelectAll = function() end,
-  }
-  READI.Helper.table:Merge(set, opts)
+  }, opts)
 
   --------------------------------------------------------------------------------
   -- Creating the checkbox

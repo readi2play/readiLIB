@@ -22,11 +22,14 @@ function READI:OptionPanel(data, opts)
   --------------------------------------------------------------------------------
   -- DEFINE DEFAULT VALUES
   --------------------------------------------------------------------------------
-  local set = {
+  local set = READI.Helper.table:Merge({
     parent = nil,
-    title = nil,
-  }  
-  READI.Helper.table:Merge(set, opts)
+    title = {
+      text = nil,
+      template = "GameFontHighlightLarge",
+      color = "white"
+    },
+  }, opts)
 
   -- create the panel frame and set its name
   local panel = CreateFrame("Frame")
@@ -44,9 +47,9 @@ function READI:OptionPanel(data, opts)
   local anchorline = nil
   if set.parent then
     local __txt = set.name
-    if set.title then __txt = set.title.text end
+    if set.title.text then __txt = set.title.text end
 
-    local headline = container:CreateFontString("ARTWORK", nil, set.title.template or "GameFontHighlightLarge")
+    local headline = container:CreateFontString("ARTWORK", nil, set.title.template)
     headline:SetPoint("TOP", container, 0, -20)
     headline:SetText(READI.Helper.color:Get(set.title.color, data.colors, __txt))
 

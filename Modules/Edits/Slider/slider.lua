@@ -33,7 +33,7 @@ local AddonName, b2h = ...
   --------------------------------------------------------------------------------
   -- DEFINE DEFAULTS
   --------------------------------------------------------------------------------
-  local set = {
+  local set = READI.Helper.table:Merge({
     region = nil,
     name = nil,
     min = 0,
@@ -47,8 +47,7 @@ local AddonName, b2h = ...
     offsetX = 0,
     offsetY = 0,
     onReset = function() end,
-  }
-  READI.Helper.table:Merge(set,opts)
+  },opts)
   --------------------------------------------------------------------------------
   -- CREATING THE FRAME
   --------------------------------------------------------------------------------

@@ -37,14 +37,14 @@ function READI:Button(data, opts)
   --------------------------------------------------------------------------------
   -- default values
   --------------------------------------------------------------------------------
-  local set = {
+  local set = READI.Helper.table:Merge({
     name = nil,
     region = nil,
     template = "UIPanelButtonTemplate",
     label = "",
     tooltip = nil,
     text = "",
-    condition = false,
+    condition = nil,
     enabled = true,
     anchor = "TOPLEFT",
     parent = nil,
@@ -55,13 +55,12 @@ function READI:Button(data, opts)
     height = nil,
     onReset = function() end,
     onClear = function() end
-  }
-  READI.Helper.table:Merge(set, opts)
-
+  }, opts)
   --------------------------------------------------------------------------------
   -- Creating the button
   --------------------------------------------------------------------------------
   local btn = _G[set.name] or CreateFrame("Button", set.name, set.region, set.template)
+
   if set.parent and set.p_anchor then
     btn:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
   else
@@ -86,7 +85,7 @@ function READI:Button(data, opts)
     if not set.tooltip then return end
     self.tooltip:Hide()
   end
-
+  
   local conText = set.region:CreateFontString("ARTWORK", nil, "GameFontHighlight")
   conText:SetPoint("TOP", btn, "BOTTOM", 0, -5)
   conText:Hide()

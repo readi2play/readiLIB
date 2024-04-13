@@ -36,7 +36,7 @@ function READI:DropDown(data, opts)
   --------------------------------------------------------------------------------
   -- SETTING DEFAULTS
   --------------------------------------------------------------------------------
-  local set = {
+  local set = READI.Helper.table:Merge({
     storage = {},
     name = nil,
     region = nil,
@@ -49,8 +49,7 @@ function READI:DropDown(data, opts)
     offsetY = 0,
     enabled = true,
     onReset = function() end,
-  }
-  READI.Helper.table:Merge(set, opts)
+  }, opts)
   --------------------------------------------------------------------------------
   -- CREATING THE FRAME
   --------------------------------------------------------------------------------

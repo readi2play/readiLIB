@@ -80,20 +80,19 @@ end
 --- A simple function to merge values of several source tables into one dist table 
 ---@param dst table : the table the other tables should be merged into
 ---@param args table : a variable number of tables to be merged into dst
-function READI.Helper.table:Merge(dst, ...)
-  if type(dst) ~= "table" then dst = {} end
+function READI.Helper.table:Merge(...)
   local size = select("#", ...)
-  if size == 0 then return dst end
-  for i = 1, size do
-    local src = select(i, ...)
-    if type(src) == "table" then
-      for k,v in pairs(src) do
-        if type(v) == table then
-          dst[k] = READI.Helper.table:Merge(dst[k], v)
-        else
-          dst[k] = v
-        end
-      end
+  if size == 0 then return {} end
+
+  local dst = select(1,...)
+  if type(dst) ~= "table" then return {} end
+
+  local srcs = select(2,...)
+  for k,src in pairs(srcs) do
+    if type(src) == "table" and (type(dst[k] or false) == "table") then
+      READI.Helper.table:Merge(dst[k], src)
+    else
+      dst[k] = src
     end
   end
   return dst  
@@ -180,4 +179,23 @@ function READI.Helper.table:VerifyDepth(tbl, key, lvl)
     return READI.Helper.table:VerifyDepth(tbl, table.concat(depths,"."), lvl)
   end
   return false
+end
+--------------------------------------------------------------------------------
+function READI.Helper.table:Dump(o, tbs, tb)
+  tb = tb or 0
+  tbs = tbs or '  '
+  if type(o) == 'table' then
+    local s = '{'
+    if (next(o)) then s = s .. '\n' else return s .. '}' end
+    tb = tb + 1
+    for k,v in pairs(o) do
+      if type(k) ~= 'number' then k = '"' .. k .. '"' end
+      s = s .. tbs:rep(tb) .. '[' .. k .. '] = ' .. READI.Helper.table:Dump(v, tbs, tb)
+      s = s .. ',\n'
+    end
+    tb = tb - 1
+    return s .. tbs:rep(tb) .. '}'
+  else
+    return tostring(o)
+  end
 end

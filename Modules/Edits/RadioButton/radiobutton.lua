@@ -38,7 +38,7 @@ function READI:RadioButton(data, opts)
   --------------------------------------------------------------------------------
   -- SETTING DEFAULTS
   --------------------------------------------------------------------------------
-  local set = {
+  local set = READI.Helper.table:Merge({
     name = nil,
     region = nil,
     template = "UIRadioButtonTemplate",
@@ -59,8 +59,7 @@ function READI:RadioButton(data, opts)
     offsetX = 0,
     offsetY = 0,
     onReset = function() end,
-  }
-  READI.Helper.table:Merge(set, opts, "radiobutton", "label")
+  }, opts)
   --------------------------------------------------------------------------------
   -- CREATING THE FRAME
   --------------------------------------------------------------------------------
