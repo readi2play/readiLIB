@@ -75,19 +75,16 @@ end
 --- A simple function to merge values of several source tables into one dist table 
 ---@param dst table : the table the other tables should be merged into
 ---@param args table : a variable number of tables to be merged into dst
-function READI.Helper.table:Merge(...)
-  local size = select("#", ...)
-  if size == 0 then return {} end
-
-  local dst = select(1,...)
+function READI.Helper.table:Merge(dst, ...)
   if type(dst) ~= "table" then return {} end
 
-  local srcs = select(2,...)
-  for k,src in pairs(srcs) do
-    if type(src) == "table" and (type(dst[k] or false) == "table") then
-      READI.Helper.table:Merge(dst[k], src)
-    else
-      dst[k] = src
+  for _, src in ipairs({...}) do
+    for k,v in pairs(src) do
+      if type(v) == "table" and (type(dst[k] or false) == "table") then
+        READI.Helper.table:Merge(dst[k], v)
+      else
+        dst[k] = v
+      end
     end
   end
   return dst  
