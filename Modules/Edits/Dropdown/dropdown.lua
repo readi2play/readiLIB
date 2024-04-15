@@ -55,17 +55,18 @@ function READI:DropDown(data, opts)
   --------------------------------------------------------------------------------
   local dd = _G[set.name] or CreateFrame("Frame", set.name, set.region, set.template) 
   dd:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
+  local db = loadstring(format("return %s", set.storage))()
   
   UIDropDownMenu_SetWidth(dd, set.width)
-  UIDropDownMenu_SetText(dd, set.storage[set.option])
+  UIDropDownMenu_SetText(dd, db[set.option])
 
   UIDropDownMenu_Initialize(dd, function(self, level)
     local info = UIDropDownMenu_CreateInfo()
     if (level or 1) == 1 then
       for i,v in ipairs(set.values) do
-        info.text, info.arg1, info.checked = gsub(v, "_", " "), v, v == set.storage[set.option]
+        info.text, info.arg1, info.checked = gsub(v, "_", " "), v, v == db[set.option]
         info.func = function(self, arg1, arg2, checked)
-          set.storage[set.option] = self.value
+          db[set.option] = self.value
           UIDropDownMenu_SetText(dd, self.value)
           self.checked = true
           EventRegistry:TriggerEvent(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"))

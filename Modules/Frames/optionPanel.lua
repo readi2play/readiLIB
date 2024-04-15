@@ -53,10 +53,14 @@ function READI:OptionPanel(data, opts)
     headline:SetPoint("TOP", container, 0, -20)
     headline:SetText(READI.Helper.color:Get(set.title.color, data.colors, __txt))
 
-    anchorline = CreateFrame("Frame")
-    anchorline:SetPoint("TOP", headline, "BOTTOM", 0,0)
+    anchorline = CreateFrame("Frame", nil, container)
+    anchorline:SetPoint("TOP", headline, "BOTTOM", 0,-10)
     anchorline:SetPoint("LEFT", container, "LEFT", 0, 0)
     anchorline:SetPoint("RIGHT", container, "RIGHT", 0, 0)
+    anchorline:SetHeight(1)
+    -- anchorline.texture = anchorline:CreateTexture()
+    -- anchorline.texture:SetAllPoints(anchorline)
+    -- anchorline.texture:SetColorTexture(0,0.98,0.83,1)
   end
 
   return panel, container, anchorline

@@ -59,13 +59,13 @@ function READI:CheckBox(data, opts)
     onClear = function() end,
     onSelectAll = function() end,
   }, opts)
-
   --------------------------------------------------------------------------------
   -- Creating the checkbox
   --------------------------------------------------------------------------------
   local cb = _G[set.name] or CreateFrame("CheckButton", set.name, set.region, set.template)
-  cb:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
-
+  --------------------------------------------------------------------------------
+  -- Define methods
+  --------------------------------------------------------------------------------
   function cb:SetState(enabled)
     if enabled == nil then enabled = true end
     cb.Text:SetText(nil)
@@ -76,8 +76,16 @@ function READI:CheckBox(data, opts)
       cb:Disable()
       cb.Text:SetText( READI.Helper.color:Get(set.disabled_color, set.colors, set.label) )
     end
+    return cb
   end
-
+  --------------------------------------------------------------------------------
+  -- Positioning and Method-Calls
+  --------------------------------------------------------------------------------
+  cb:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
+  cb:SetState(opts.enabled)
+  --------------------------------------------------------------------------------
+  -- Event Handling
+  --------------------------------------------------------------------------------
   cb:HookScript("OnClick", set.onClick)
   --------------------------------------------------------------------------------
   -- Register Custom Events
