@@ -131,5 +131,17 @@ function READI:Dialog(data,opts)
     })
   end
 
+  dialog:HookScript("OnKeyDown", function(evt, key, down)
+    if not READI.Helper.table:Contains(key, { "ESCAPE", "ENTER" }) then return end
+
+    if key == "ESCAPE" then
+      if dialog.buttons.cancellation then
+        dialog.buttons.cancellation:Click()      
+      end
+    elseif key == "ENTER" then
+      dialog.buttons.confirmation:Click()
+    end
+  end)
+
   return dialog
 end
