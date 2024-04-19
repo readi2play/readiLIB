@@ -37,9 +37,10 @@ function READI:DropDown(data, opts)
   -- SETTING DEFAULTS
   --------------------------------------------------------------------------------
   local set = READI.Helper.table:Merge({
-    storage = {},
+    storage = "{}",
     name = nil,
     region = nil,
+    condition = true,
     template = "UIDropDownMenuTemplate",
     width = 200,
     anchor = "TOPLEFT",
@@ -55,21 +56,55 @@ function READI:DropDown(data, opts)
   --------------------------------------------------------------------------------
   local dd = _G[set.name] or CreateFrame("Frame", set.name, set.region, set.template) 
   dd:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
-  local db = loadstring(format("return %s", set.storage))()
+  function dd:GetValue() return dd.value end
+  function dd:SetValue(newValue, newText)
+    dd.value = newValue
+    dd:SetText(newText or newValue)
+  end
+  function dd:GetText() return dd.text end
+  function dd:SetText(newText) UIDropDownMenu_SetText(dd, newText) end
+  
+  
+  local db = loadstring(format("return %s", (set.storage or "nil")))()
   
   UIDropDownMenu_SetWidth(dd, set.width)
-  UIDropDownMenu_SetText(dd, db[set.option])
+  if set.option then
+    UIDropDownMenu_SetText(dd, db[set.option])
+  end
 
   UIDropDownMenu_Initialize(dd, function(self, level)
     local info = UIDropDownMenu_CreateInfo()
     if (level or 1) == 1 then
       for i,v in ipairs(set.values) do
-        info.text, info.arg1, info.checked = gsub(v, "_", " "), v, v == db[set.option]
-        info.func = function(self, arg1, arg2, checked)
-          db[set.option] = self.value
-          UIDropDownMenu_SetText(dd, self.value)
-          self.checked = true
-          EventRegistry:TriggerEvent(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"))
+        if set.option then
+          if type(v) == "table" then
+            info.text, info.arg1, info.checked = gsub(v.txt, "_", " "), v.val, v.val == db[set.option]
+          else
+            info.text, info.arg1, info.checked = gsub(v, "_", " "), v, v == db[set.option]
+          end
+          info.func = function (self, arg1, arg2, checked)
+            if set.condition then db[set.option] = arg1 end
+            UIDropDownMenu_SetText(dd, self.value)
+            self.checked = true
+            dd.text, dd.value = self.value, arg1
+            EventRegistry:TriggerEvent(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"))
+            CloseDropDownMenus()
+          end
+        else
+          if type(v) == "table" then
+            info.text, info.arg1 = gsub(v.txt, "_", " "), v.val
+            info.checked = v.val == dd:GetValue()
+          else
+            info.text, info.arg1 = gsub(v, "_", " "), v
+            info.checked = v == dd:GetValue()
+          end
+          info.func = function(self,arg1,arg2,checked)
+            UIDropDownMenu_SetText(dd, self.value)
+            dd:SetValue(arg1, self.value)
+            self.checked = true
+            EventRegistry:TriggerEvent(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"))
+            CloseDropDownMenus()
+          end
         end
         UIDropDownMenu_AddButton(info)
       end
@@ -81,9 +116,7 @@ function READI:DropDown(data, opts)
   else
     UIDropDownMenu_EnableDropDown(dd)
   end
-  
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnReset"), set.onReset)
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"), set.onChange)
 
+  EventRegistry:RegisterCallback(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"), set.onChange)
   return dd
 end

@@ -94,21 +94,22 @@ end
 --- The given table will be changed to represent the same set of keys
 --- @param master table : The master table defining the set of keys
 --- @param servant table : the table to be normalized
-function READI.Helper.table:CleanUp(master, servant)
+function READI.Helper.table:CleanUp(master, servant, exception)
   if type(master) ~= "table" then
     error("Oops, master table seems to be of a wrong type. Please provide a valid table.", 2)
   end
-
   for k,v in pairs(servant) do
-    if (type(v) or false) == "table" then
-      if master[k] ~= nil then
-        servant[k] = READI.Helper.table:CleanUp(master[k], v)
+    if not exception or k ~= exception then
+      if (type(v) or false) == "table" then
+        if master[k] ~= nil then
+          servant[k] = READI.Helper.table:CleanUp(master[k], v)
+        else
+          servant[k] = nil
+        end
       else
-        servant[k] = nil
-      end
-    else
-      if master[k] == nil then
-        servant[k] = nil
+        if master[k] == nil then
+          servant[k] = nil
+        end
       end
     end
   end
@@ -187,4 +188,17 @@ function READI.Helper.table:Dump(o, tbs, tb)
   else
     return tostring(o)
   end
+end
+
+function READI.Helper.table:Move(pattern, src, dst)
+  for key,val in pairs(pattern) do
+    if src[key] then
+      if (type(val) or false) == "table" then
+        dst[key] = CopyTable(src[key])
+      else
+        dst[key] = src[key]
+      end
+      src[key] = nil
+    end
+  end 
 end

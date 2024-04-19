@@ -1,19 +1,20 @@
---------------------------------------------------------------------------------
--- BASICS
---------------------------------------------------------------------------------
+--[[----------------------------------------------------------------------------
+BASICS
+------------------------------------------------------------------------------]]
 local AddonName, rdl = ...
+--[[----------------------------------------------------------------------------
+READI:OptionPanel
 --------------------------------------------------------------------------------
--- READI:OptionPanel
---------------------------------------------------------------------------------
----@param data table :
----@param opts table :
--- * name [string] : the name to give the panel
--- * parent (optional) [string] : the name of the parent panel if this one is not the main panel itself (defaults to: nil)
--- * title (optional) [table] : a table defining the settings for the panel headline (defaults to: nil)
----- * template [string] : the template to be used for the headline
----- * text [string] :  the headline text itself
----- * color [string] : the headline color
--- * callback [function] : a function to be called right after creating the panel. This function gets the panel, the container and the headline as arguments to enhance positioning of additional content. (defaults to: nil)
+@param data table :
+@param opts table :
+ * name [string] : the name to give the panel
+ * parent (optional) [string] : the name of the parent panel if this one is not the main panel itself (defaults to: nil)
+ * title (optional) [table] : a table defining the settings for the panel headline (defaults to: nil)
+ * template [string] : the template to be used for the headline
+ * text [string] :  the headline text itself
+ * color [string] : the headline color
+ * callback [function] : a function to be called right after creating the panel. This function gets the panel, the container and the headline as arguments to enhance positioning of additional content. (defaults to: nil)
+]]--
 function READI:OptionPanel(data, opts)
   --------------------------------------------------------------------------------
   -- ERROR HANDLING
@@ -24,6 +25,7 @@ function READI:OptionPanel(data, opts)
   --------------------------------------------------------------------------------
   local set = READI.Helper.table:Merge({
     parent = nil,
+    isScrollable = false,
     title = {
       text = nil,
       template = "GameFontHighlightLarge",
@@ -41,7 +43,7 @@ function READI:OptionPanel(data, opts)
   local container = CreateFrame("Frame", nil, panel)
   container.name = READI.Helper.string:Capitalize(set.name).." Container"
   container:SetPoint("TOPLEFT", 5, -5)
-  container:SetPoint("BOTTOMRIGHT", -5, 5)
+  container:SetPoint("BOTTOMRIGHT", -25, 55)
 
   -- if the panel is not meant to be the main config panel for the addon set its name or title as headline
   local anchorline = nil
@@ -57,10 +59,10 @@ function READI:OptionPanel(data, opts)
     anchorline:SetPoint("TOP", headline, "BOTTOM", 0,-10)
     anchorline:SetPoint("LEFT", container, "LEFT", 0, 0)
     anchorline:SetPoint("RIGHT", container, "RIGHT", 0, 0)
-    anchorline:SetHeight(1)
-    -- anchorline.texture = anchorline:CreateTexture()
-    -- anchorline.texture:SetAllPoints(anchorline)
-    -- anchorline.texture:SetColorTexture(0,0.98,0.83,1)
+    anchorline:SetHeight(2)
+    anchorline.texture = anchorline:CreateTexture()
+    anchorline.texture:SetTexture(READI.T.rdl150002)
+    anchorline.texture:SetAllPoints(anchorline)
   end
 
   return panel, container, anchorline
