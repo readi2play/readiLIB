@@ -14,6 +14,8 @@ READI.Localization.deDE = {
         cancel = "Abbrechen",
         okay = "OK",
         submit = "Bestätigen",
+        yes = "Ja",
+        no = "Nein",
       }
     },
     commons = {
