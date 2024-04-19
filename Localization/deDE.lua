@@ -17,6 +17,7 @@ READI.Localization.deDE = {
       }
     },
     commons = {
+      default = "Standard",
       button = {
         none = "Buttons",
         one = "Button",

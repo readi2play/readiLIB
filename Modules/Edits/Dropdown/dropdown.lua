@@ -32,7 +32,7 @@ function READI:DropDown(data, opts)
   --------------------------------------------------------------------------------
   -- ERROR HANDLING
   --------------------------------------------------------------------------------
-  READI:CheckFactoryParams(data, opts, "dropdown", "values", "onChange")
+  READI:CheckFactoryParams(data, opts, "dropdown", "values")
   --------------------------------------------------------------------------------
   -- SETTING DEFAULTS
   --------------------------------------------------------------------------------
@@ -117,6 +117,8 @@ function READI:DropDown(data, opts)
     UIDropDownMenu_EnableDropDown(dd)
   end
 
-  EventRegistry:RegisterCallback(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"), set.onChange)
+  if set.onChange then
+    EventRegistry:RegisterCallback(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"), set.onChange)
+  end
   return dd
 end

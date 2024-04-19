@@ -14,9 +14,12 @@ READI.Localization.enUS = {
         cancel = "Cancel",
         okay = "OK",
         submit = "Submit",
+        yes = "Yes",
+        no = "No",
       }
     },
     commons = {
+      default = "Default",
       button = {
         none = "Buttons",
         one = "Button",
