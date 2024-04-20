@@ -54,9 +54,10 @@ function READI:DropDown(data, opts)
   --------------------------------------------------------------------------------
   -- CREATING THE FRAME
   --------------------------------------------------------------------------------
-  local dd = _G[set.name] or CreateFrame("Frame", set.name, set.region, set.template) 
+  local dd = _G[set.name] or CreateFrame("Frame", set.name, set.region, set.template)
+  dd.MenuList = set.values
   dd:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
-  function dd:GetValue() return dd.value end
+    function dd:GetValue() return dd.value end
   function dd:SetValue(newValue, newText)
     dd.value = newValue
     dd:SetText(newText or newValue)
@@ -64,7 +65,7 @@ function READI:DropDown(data, opts)
   function dd:GetText() return dd.text end
   function dd:SetText(newText) UIDropDownMenu_SetText(dd, newText) end
   
-  
+    
   local db = loadstring(format("return %s", (set.storage or "nil")))()
   
   UIDropDownMenu_SetWidth(dd, set.width)
@@ -75,7 +76,7 @@ function READI:DropDown(data, opts)
   UIDropDownMenu_Initialize(dd, function(self, level)
     local info = UIDropDownMenu_CreateInfo()
     if (level or 1) == 1 then
-      for i,v in ipairs(set.values) do
+      for i,v in ipairs(dd.MenuList) do
         if set.option then
           if type(v) == "table" then
             info.text, info.arg1, info.checked = gsub(v.txt, "_", " "), v.val, v.val == db[set.option]
