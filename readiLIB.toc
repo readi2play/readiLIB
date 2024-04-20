@@ -44,4 +44,5 @@ Modules/Edits/Dropdown/dropdown.lua
 Modules/Edits/Slider/slider.lua
 Modules/FrameSelector/frameSelector.lua
 Modules/Frames/optionPanel.lua
+Modules/Frames/dialog.lua
 Modules/Icons/icon.lua
