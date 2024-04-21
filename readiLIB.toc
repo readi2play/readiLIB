@@ -2,7 +2,7 @@
 ## Title: readiLIB by |cFF78B064readi2play|r 
 ## Notes: A small utility library for addons of the |cFF78B064readi2play|r family
 ## IconTexture: Interface\AddOns\readiLIB\media\readiLIB_logo.tga
-## Version: 0.5.1
+## Version: 0.5.1.5
 ## Author: |cFF78B064readi2play|r
 
 core.lua
