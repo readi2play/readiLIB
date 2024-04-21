@@ -64,6 +64,11 @@ function READI:DropDown(data, opts)
   end
   function dd:GetText() return dd.text end
   function dd:SetText(newText) UIDropDownMenu_SetText(dd, newText) end
+  function dd:AddToMenuList(val)
+    if not READI.Helper.table:Contains(val, dd.MenuList) then
+      dd.MenuList[#dd.MenuList + 1] = val
+    end
+  end
   
     
   local db = loadstring(format("return %s", (set.storage or "nil")))()
