@@ -70,7 +70,7 @@ function READI:EditBox(data, opts)
   if set.type == "number" and not set.okayForNumber then
     eb:SetJustifyH("CENTER")
   end
-  eb:SetJustifyV("TOP")
+eb:SetJustifyV("TOP")
   eb:SetText(set.value)
   eb:SetCursorPosition(0)
 
@@ -128,6 +128,6 @@ function READI:EditBox(data, opts)
     end)
   end
 
-
+  eb:SetCursorPosition(0)
   return eb
 end

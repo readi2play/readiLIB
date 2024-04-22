@@ -13,6 +13,8 @@ READI.T = READI.T or {
   rdl110003 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\RoundButtonIconMask",
   rdl110004 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\RoundButtonHighlight",
   rdl110005 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\RoundButtonBackgroundWoodBlack",
+  rdl110006 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\RoundButtonBorderSilver",
+  rdl110007 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\RoundButtonBorderSilverPlain",
   rdl120001 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\SelectorCrosshairs",
   rdl150002 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\HorizontalDivider",
 }
