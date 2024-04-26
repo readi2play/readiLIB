@@ -75,7 +75,7 @@ function READI:DropDown(data, opts)
   
   UIDropDownMenu_SetWidth(dd, set.width)
   if set.option then
-    UIDropDownMenu_SetText(dd, db[set.option])
+    dd:SetText(db[set.option])
   end
 
   UIDropDownMenu_Initialize(dd, function(self, level)
@@ -90,7 +90,7 @@ function READI:DropDown(data, opts)
           end
           info.func = function (self, arg1, arg2, checked)
             if set.condition then db[set.option] = arg1 end
-            UIDropDownMenu_SetText(dd, self.value)
+            dd:SetText(self.value)
             self.checked = true
             dd.text, dd.value = self.value, arg1
             EventRegistry:TriggerEvent(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"))
@@ -105,7 +105,7 @@ function READI:DropDown(data, opts)
             info.checked = v == dd:GetValue()
           end
           info.func = function(self,arg1,arg2,checked)
-            UIDropDownMenu_SetText(dd, self.value)
+            dd:SetText(self.value)
             dd:SetValue(arg1, self.value)
             self.checked = true
             EventRegistry:TriggerEvent(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"))
@@ -123,8 +123,7 @@ function READI:DropDown(data, opts)
     UIDropDownMenu_EnableDropDown(dd)
   end
 
-  if set.onChange then
-    EventRegistry:RegisterCallback(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"), set.onChange)
-  end
+  EventRegistry:RegisterCallback(format("%s.%s_%s.%s", data.prefix, data.keyword, (set.name or "DropDown"), "OnChange"), set.onChange or function() end)
+  EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnReset"), set.onReset or function() end)
   return dd
 end
