@@ -35,7 +35,7 @@ function READI:StartFrameSelector(data, db_path, field)
       READI:StopFrameSelector(data, db_path, field)
     else
 
-      local focusedFrame = GetMouseFocus()
+      local focusedFrame = GetMouseFoci()[1]
       local focusedFrameName = nil
 
       if focusedFrame then
