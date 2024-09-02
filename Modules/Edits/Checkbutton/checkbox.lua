@@ -18,6 +18,7 @@ local AddonName, rdl = ...
 -- * anchor (optional) string : The positioning anchor of the new frame (defaults to "TOPLEFT")
 -- * offsetX (optional) number : The x-axis offset of the created frame (defaults to: 0)
 -- * offsetY (optional) number : The y-axis offset of the created frame (defaults to: 0)
+-- * width (optional) number : The width for the element (defaults to nil)
 -- * name (optional) string : The name the created frame should have (defaults to: nil)
 -- * region (optional) frame : The frame the new one should relate to (defaults to: nil)
 -- * template (optional) string : The Template that should be used for creating the button (defaults to: "InterfaceOptionsCheckButtonTemplate")
@@ -76,6 +77,15 @@ function READI:CheckBox(data, opts)
       cb:Disable()
       cb.Text:SetText( READI.Helper.color:Get(set.disabled_color, set.colors, set.label) )
     end
+    cb.Text:SetPoint("LEFT", cb, "RIGHT", 5, 0)
+
+    if opts.width ~= nil then
+      cb.Text:SetJustifyH("LEFT")
+      cb.Text:SetJustifyV("TOP")
+      cb.Text:SetWordWrap(true)
+      cb.Text:SetWidth(opts.width)
+    end
+
     return cb
   end
   --------------------------------------------------------------------------------
