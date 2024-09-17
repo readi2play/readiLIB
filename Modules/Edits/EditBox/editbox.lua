@@ -29,6 +29,7 @@ local AddonName, rdl = ...
 -- * showButtons (optional) boolean : Determine if additional buttons ("OK" for text, "+" and "-" for number) should be added to the button (defaults to true)
 -- * okayForNumber (optional) boolean : Determine if the "okay" Button of a text field should also be used for number fields (defaults to false) 
 -- * onReset (optional) function : Callback function for what to happen when the current window's editables are reset to default
+-- * validity (optional) string : A string representing a validity warning to be shown on condition
 function READI:EditBox(data, opts)
   --------------------------------------------------------------------------------
   -- ERROR HANDLING
@@ -54,6 +55,7 @@ function READI:EditBox(data, opts)
     offsetY = 0,
     showButtons = true,
     okayForNumber = false,
+    validity = "",
     onReset = function() end,
   },opts)
   --------------------------------------------------------------------------------
@@ -70,9 +72,16 @@ function READI:EditBox(data, opts)
   if set.type == "number" and not set.okayForNumber then
     eb:SetJustifyH("CENTER")
   end
-eb:SetJustifyV("TOP")
+  eb:SetJustifyV("TOP")
   eb:SetText(set.value)
   eb:SetCursorPosition(0)
+
+  eb.validCheck = set.region:CreateFontString(READI.ARTWORK, nil, "GameFontNormal")
+  eb.validCheck:SetJustifyH(READI.ANCHOR_LEFT)
+  eb.validCheck:SetWidth(eb:GetWidth())
+  eb.validCheck:SetPoint(READI.ANCHOR_TOPLEFT, eb, READI.ANCHOR_BOTTOMLEFT, 0, -10)
+  eb.validCheck:SetText(set.validity)
+  eb.validCheck:SetAlpha(0)
 
   EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"), set.onChange)
   EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnReset"), set.onReset)

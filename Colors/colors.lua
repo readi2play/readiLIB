@@ -9,4 +9,5 @@ READI.Colors = READI.Colors or {
   ["warning"] = "CB882B",
   ["success"] = "76CB43",
   ["info"] = "2A87D1",
+  ["system"] = "FFD100"
 }

@@ -57,7 +57,7 @@ function READI:DropDown(data, opts)
   local dd = _G[set.name] or CreateFrame("Frame", set.name, set.region, set.template)
   dd.MenuList = set.values
   dd:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
-    function dd:GetValue() return dd.value end
+  function dd:GetValue() return dd.value end
   function dd:SetValue(newValue, newText)
     dd.value = newValue
     dd:SetText(newText or newValue)
@@ -88,6 +88,16 @@ function READI:DropDown(data, opts)
           else
             info.text, info.arg1, info.checked = gsub(v, "_", " "), v, v == db[set.option]
           end
+
+          if v.val == db[set.option] then
+            dd.value = v.val
+            if v.txt == v.val then
+              dd:SetText(v.val)
+            else
+              dd:SetText(v.txt)
+            end
+          end
+
           info.func = function (self, arg1, arg2, checked)
             if set.condition then db[set.option] = arg1 end
             dd:SetText(self.value)
@@ -98,6 +108,14 @@ function READI:DropDown(data, opts)
           end
         else
           if type(v) == "table" then
+            if v.val == dd:GetValue() then
+              if v.txt == v.val then
+                dd:SetText(v.val)
+              else
+                dd:SetText(v.txt)
+              end
+            end
+  
             info.text, info.arg1 = gsub(v.txt, "_", " "), v.val
             info.checked = v.val == dd:GetValue()
           else

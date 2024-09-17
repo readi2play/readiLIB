@@ -1,0 +1,26 @@
+--------------------------------------------------------------------------------
+-- BASICS
+--------------------------------------------------------------------------------
+local AddonName, rdl = ...
+
+RD.ANCHOR_TOPLEFT = "TOPLEFT"
+RD.ANCHOR_TOP = "TOP"
+RD.ANCHOR_TOPRIGHT = "TOPRIGHT"
+RD.ANCHOR_LEFT = "LEFT"
+RD.ANCHOR_CENTER = "CENTER"
+RD.ANCHOR_RIGHT = "RIGHT"
+RD.ANCHOR_BOTTOMLEFT = "BOTTOMLEFT"
+RD.ANCHOR_BOTTOM = "BOTTOM"
+RD.ANCHOR_BOTTOMRIGHT = "BOTTOMRIGHT"
+
+RD.Anchors = {
+  RD.ANCHOR_TOPLEFT,
+  RD.ANCHOR_TOP,
+  RD.ANCHOR_TOPRIGHT,
+  RD.ANCHOR_LEFT,
+  RD.ANCHOR_CENTER,
+  RD.ANCHOR_RIGHT,
+  RD.ANCHOR_BOTTOMLEFT,
+  RD.ANCHOR_BOTTOM,
+  RD.ANCHOR_BOTTOMRIGHT  
+}
