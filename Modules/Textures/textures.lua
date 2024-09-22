@@ -16,5 +16,8 @@ READI.T = READI.T or {
   rdl110006 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\RoundButtonBorderSilver",
   rdl110007 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\RoundButtonBorderSilverPlain",
   rdl120001 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\SelectorCrosshairs",
+  rdl130001 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\UIPanelClose",
+  rdl130002 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\UIPanelCloseHighlight",
+  rdl130003 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\UIPanelClosePushed",
   rdl150002 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\HorizontalDivider",
 }

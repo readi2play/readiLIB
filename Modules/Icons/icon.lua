@@ -39,7 +39,7 @@ local AddonName, rdl = ...
     icon = CreateFrame("Frame")
   end
   icon:SetSize(set.width, set.height)
-  icon.tex = icon:CreateTexture()
+  icon.tex = icon:CreateTexture(set.name, RD.ARTWORK)
   icon.tex:SetAllPoints(icon)
   icon.tex:SetTexture(set.texture)
 
