@@ -19,5 +19,11 @@ READI.T = READI.T or {
   rdl130001 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\UIPanelClose",
   rdl130002 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\UIPanelCloseHighlight",
   rdl130003 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\UIPanelClosePushed",
+  rdl140001 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\PagingBackArrow",
+  rdl140002 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\PagingNextArrow",
+  rdl140003 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\PagingBackArrowDisabled",
+  rdl140004 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\PagingNextArrowDisabled",
+  rdl140005 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\PagingBackArrowHighlight",
+  rdl140006 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\PagingNextArrowHighlight",
   rdl150002 = "Interface\\AddOns\\readiLIB\\Media\\Textures\\HorizontalDivider",
 }

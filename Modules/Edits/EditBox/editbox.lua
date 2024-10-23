@@ -83,8 +83,8 @@ function READI:EditBox(data, opts)
   eb.validCheck:SetText(set.validity)
   eb.validCheck:SetAlpha(0)
 
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"), set.onChange)
-  EventRegistry:RegisterCallback(format("%s.%s.%s", data.prefix, data.keyword, "OnReset"), set.onReset)
+  EventRegistry:RegisterCallback(format("%s.%s", set.name, "OnChange"), set.onChange)
+  EventRegistry:RegisterCallback(format("%s.%s", set.name, "OnReset"), set.onReset)
 
   if not set.showButtons then return eb end
   if set.type == "text" or set.okayForNumber then
@@ -103,7 +103,7 @@ function READI:EditBox(data, opts)
     eb:SetScript("OnEditFocusLost", function(self) eb.ok:Hide() end)
     eb.ok:SetScript("OnClick", function()
       eb:ClearFocus()
-      set.onChange()
+      EventRegistry:TriggerEvent(format("%s.%s", set.name, "OnChange"))
     end)
   elseif set.type == "number" then
     eb.inc = CreateFrame("Button", nil, eb, "UIPanelButtonTemplate")
@@ -122,18 +122,18 @@ function READI:EditBox(data, opts)
 
     eb:HookScript("OnEnterPressed", function()
       eb:ClearFocus()
-      EventRegistry:TriggerEvent(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"))
+      EventRegistry:TriggerEvent(format("%s.%s", set.name, "OnChange"))
     end)
     eb.inc:SetScript("OnClick", function()
       local value = tonumber(eb:GetText()) + set.step
       eb:SetText(value)
-      EventRegistry:TriggerEvent(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"))
+      EventRegistry:TriggerEvent(format("%s.%s", set.name, "OnChange"))
     end)
 
     eb.dec:SetScript("OnClick", function()
       local value = tonumber(eb:GetText()) - set.step
       eb:SetText(value)
-      EventRegistry:TriggerEvent(format("%s.%s.%s", data.prefix, data.keyword, "OnChange"))
+      EventRegistry:TriggerEvent(format("%s.%s", set.name, "OnChange"))
     end)
   end
 

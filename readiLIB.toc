@@ -1,4 +1,4 @@
-## Interface: 110002
+## Interface: 110005
 ## Title: readiLIB by |cFF78B064readi2play|r 
 ## Notes: A small utility library for addons of the |cFF78B064readi2play|r family
 ## IconTexture: Interface\AddOns\readiLIB\media\readiLIB_logo.tga

@@ -92,10 +92,10 @@ function READI:OptionsContainer(data, opts)
   --------------------------------------------------------------------------------
   local set = READI.Helper.table:Merge({
     parent = nil,
-    isScrollable = false,
     width = nil,
     background = nil,
     border = nil,
+    clipChildren = false,
     left = {
       offsetX = 0,
       offsetY = 0,
@@ -110,11 +110,13 @@ function READI:OptionsContainer(data, opts)
       color = "white",
     },
   }, opts)
+
   
   local container = CreateFrame("Frame", data.prefix.."ConfigContainer", panel, "BackdropTemplate")
-  container.name = data.prefix.."ConfigContainer"
-
   if set.parent then container:SetParent(set.parent) end
+
+  container:SetClipsChildren(set.clipChildren)
+
   if set.background then
     local r, g, b, a = strsplit(",", set.background, 4)
     container.background = container:CreateTexture(set.name.."BACKGROUND", RD.BACKGROUND)
@@ -134,7 +136,7 @@ function READI:OptionsContainer(data, opts)
   if set.width then
     container:SetWidth(set.width)
     container:SetPoint(RD.ANCHOR_TOPLEFT, set.left.offsetX, set.left.offsetY)
-    container:SetPoint(RD.ANCHOR_BOTTOMLEFT, set.left.offsetX, (set.left.offsetY * -1))
+    container:SetPoint(RD.ANCHOR_BOTTOMLEFT, set.left.offsetX, set.right.offsetY)
   else
     container:SetPoint(RD.ANCHOR_TOPLEFT, set.left.offsetX, set.left.offsetY)
     container:SetPoint(RD.ANCHOR_BOTTOMRIGHT, set.right.offsetX, set.right.offsetY)
@@ -145,17 +147,18 @@ function READI:OptionsContainer(data, opts)
   end
 
   -- if the panel is not meant to be the main config panel for the addon set its name or title as headline
-  local anchorline = nil
+  local __txt, headline, anchorline
   if set.parent then
-    -- local __txt = set.name
-    -- if set.title.text then __txt = set.title.text end
+    if not set.title.text then return container, anchorline end
 
-    -- local headline = container:CreateFontString("ARTWORK", nil, set.title.template)
-    -- headline:SetPoint("TOP", container, 0, -20)
-    -- headline:SetText(READI.Helper.color:Get(set.title.color, data.colors, __txt))
+    __txt = set.title.text
 
-    anchorline = CreateFrame("Frame", nil, container)
-    anchorline:SetPoint("TOP", container, "BOTTOM", 0,-20)
+    headline = container:CreateFontString("ARTWORK", nil, set.title.template)
+    headline:SetPoint("TOP", container, 0, -20)
+    headline:SetText(READI.Helper.color:Get(set.title.color, data.colors, __txt))
+
+    anchorline = _G[container:GetName().."Anchorline"] or CreateFrame("Frame", container:GetName().."Anchorline", container)
+    anchorline:SetPoint("TOP", headline, "BOTTOM", 0,-20)
     anchorline:SetPoint("LEFT", container, "LEFT", 0, 0)
     anchorline:SetPoint("RIGHT", container, "RIGHT", 0, 0)
     anchorline:SetHeight(2)

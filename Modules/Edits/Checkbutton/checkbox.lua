@@ -70,14 +70,20 @@ function READI:CheckBox(data, opts)
   function cb:SetState(enabled)
     if enabled == nil then enabled = true end
     cb.Text:SetText(nil)
+
     if enabled then
       cb:Enable()
-      cb.Text:SetText( READI.Helper.color:Get(set.enabled_color, set.colors, set.label) )
+      cb.Text:SetText( READI.Helper.color:Get(set.enabled_color, set.colors, set.label.string or set.label) )
     else
       cb:Disable()
-      cb.Text:SetText( READI.Helper.color:Get(set.disabled_color, set.colors, set.label) )
+      cb.Text:SetText( READI.Helper.color:Get(set.disabled_color, set.colors, set.label.string or set.label) )
     end
     cb.Text:SetPoint("LEFT", cb, "RIGHT", 5, 0)
+
+    if type(set.label) == "table" then
+      cb.Text:SetSpacing(set.label.spacing)
+      cb.Text:SetTextScale(set.label.scale)
+    end
 
     if opts.width ~= nil then
       cb.Text:SetJustifyH("LEFT")

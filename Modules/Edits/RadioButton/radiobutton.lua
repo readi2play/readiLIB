@@ -42,12 +42,16 @@ function READI:RadioButton(data, opts)
     name = nil,
     region = nil,
     template = "UIRadioButtonTemplate",
+    width = 32,
+    height = 32,
     textures = {
       normal = nil,
       highlight = nil,
       active = nil,
     },
+    model = nil,
     text = "",
+    tooltip = nil,
     condition = false,
     enabled = true,
     colors = READI.Colors,
@@ -66,7 +70,7 @@ function READI:RadioButton(data, opts)
   local rb = _G[set.name] or CreateFrame("CheckButton", set.name, set.region, set.template)
   local subName = format("%s_RadioButton_%s_%s_%s", data.prefix, set.option, set.value, "%s")
 
-  if set.textures and set.textures ~= {} then
+  if set.textures.normal then
     -- remove the defaults textures
     local normalTex = rb:GetNormalTexture()
     normalTex:ClearAllPoints()
@@ -77,7 +81,7 @@ function READI:RadioButton(data, opts)
     local checkedTex = rb:GetCheckedTexture()
     checkedTex:ClearAllPoints()
 
-    rb.tex = rb:CreateTexture(format(subName, "Background"))
+    rb.tex = rb:CreateTexture(format(subName, "Background"), RD.ARTWORK)
     rb.tex:SetAllPoints(rb)
     rb.tex:SetTexture(set.textures.normal)
   end
@@ -88,18 +92,21 @@ function READI:RadioButton(data, opts)
   rb.tooltip = CreateFrame("GameTooltip", format(subName, "Tooltip"), UIParent, "GameTooltipTemplate")
 
   rb:SetPoint(set.anchor, set.parent, set.p_anchor, set.offsetX, set.offsetY)
-  rb:SetSize(32,32)
+  rb:SetSize(set.width,set.height)
 
-  if set.condition and not rb:GetChecked() then rb:Click() end
+  if set.condition and not rb:GetChecked() then
+    rb:SetChecked(true)
+    rb.tex:SetTexture(set.textures.active)
+  end
 
   local function OnEnter(self)
     if not self.tooltip then return end
     self.tooltip:SetOwner(self, "ANCHOR_LEFT")
     self.tooltip:ClearLines()
-    self.tooltip:AddLine(self.value, 1, 1, 1, true)
+    self.tooltip:AddLine(self.tt_txt or set.tooltip or self.value, 1, 1, 1, true)
     self.tooltip:Show()
 
-    if not self:GetChecked() and set.textures and set.textures ~= {} then
+    if (not self:GetChecked()) and self.tex and set.textures and set.textures ~= {} then
       self.tex:SetTexture(set.textures.highlight)
     end
   end
@@ -108,7 +115,7 @@ function READI:RadioButton(data, opts)
     if not self.tooltip then return end
 
     self.tooltip:Hide()
-    if not self:GetChecked() and set.textures and set.textures ~= {} then
+    if (not self:GetChecked()) and self.tex and set.textures and set.textures ~= {} then
       self.tex:SetTexture(set.textures.normal)
     end
   end

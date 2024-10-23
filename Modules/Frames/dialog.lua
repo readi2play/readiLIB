@@ -36,6 +36,9 @@ function READI:Dialog(data,opts)
     title = "",
     icon = nil,
     createHidden = false, 
+    strata = RD.DIALOG,
+    movable = false,
+    level = 100,
     closeOnEsc = false,
     closeXButton = {
       hidden = false,
@@ -44,7 +47,7 @@ function READI:Dialog(data,opts)
       height = 24,
       offsetX = 0,
       offsetY = 0,
-      OnClick = function() return true end
+      onClick = function() return true end
     },
     onOkay = nil,
     onCancel = nil,
@@ -100,7 +103,8 @@ function READI:Dialog(data,opts)
   local dialog = CreateFrame("Frame", set.name, UIParent, template)
   dialog.buttons = {}
   dialog:SetSize(set.width,set.height)
-  dialog:SetFrameStrata(RD.DIALOG)
+  dialog:SetFrameStrata(set.strata)
+  if set.level then dialog:SetFrameLevel(set.level) end
   dialog:SetPoint(RD.ANCHOR_CENTER, UIParent, RD.ANCHOR_CENTER, 0, offsetY)
   dialog:EnableMouse(true)
 
@@ -147,8 +151,9 @@ function READI:Dialog(data,opts)
     dialog.closeX:SetScript("OnClick", function()
       dialog:Hide()
       EventRegistry:TriggerEvent(format("%s_%s_CLOSED", data.prefix, string.upper(data.keyword)))
-      set.closeXButton.OnClick()
-    end)  
+      set.closeXButton.onClick()
+    end)
+    dialog.closeX:SetFrameLevel(dialog:GetFrameLevel() + 1)
   end
 
   if set.icon then
@@ -156,6 +161,7 @@ function READI:Dialog(data,opts)
     set.icon.name = set.icon.name or set.name.."_ICON"
     dialog.icon = READI:Icon(data, set.icon)
     dialog.icon:SetPoint(READI.ANCHOR_TOPLEFT, set.icon.region, READI.ANCHOR_TOPLEFT, -10, 10)
+    dialog.icon:SetFrameLevel(dialog:GetFrameLevel() + 1)
   end
 
   if set.title then
@@ -214,6 +220,11 @@ function READI:Dialog(data,opts)
   end
 
   if not set.allowKeyboard then return dialog end
+  dialog:SetPropagateKeyboardInput(false)
+
+  dialog:SetScript("OnShow", set.onShow or function() end)
+  dialog:SetScript("OnHide", set.onHide or function() end)
+
   dialog:HookScript("OnKeyDown", function(evt, key, down)
     if not READI.Helper.table:Contains(key, { "ESCAPE", "ENTER" }) then return end
 
@@ -227,6 +238,14 @@ function READI:Dialog(data,opts)
       end
     end
   end)
+
+  if set.movable then
+    dialog:SetMovable(true)
+    dialog:EnableMouse(true)
+    dialog:RegisterForDrag("LeftButton")
+    dialog:SetScript("OnDragStart", dialog.StartMoving)
+    dialog:SetScript("OnDragStop", dialog.StopMovingOrSizing)
+  end
 
   return dialog
 end

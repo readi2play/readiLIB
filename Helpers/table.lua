@@ -47,16 +47,16 @@ end
 ---@param size number
 function READI.Helper.table:Chunk(tbl, size)
   local i = 1
-  local count = 0
-  return function()
-    if i > #tbl then
-      return
+  local chunks = {}
+  for i=1, #tbl, size do
+    local _t = {}
+    for x=1, size do
+      _t[x] = tbl[i+x-1]
     end
-    local chunk = table.move(tbl, i, i + size - 1, 1, {})
-    i = i + size
-    count = count + 1
-    return count, chunk
+    table.insert(chunks, _t)
   end
+
+  return chunks
 end
 --------------------------------------------------------------------------------
 --- A simple function to filter a given table based on a callback function
