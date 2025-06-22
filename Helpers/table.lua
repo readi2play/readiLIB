@@ -96,7 +96,8 @@ end
 --- @param servant table : the table to be normalized
 function READI.Helper.table:CleanUp(master, servant, exception)
   if type(master) ~= "table" then
-    error("Oops, master table seems to be of a wrong type. Please provide a valid table.", 2)
+    -- error("Oops, master table seems to be of a wrong type. Please provide a valid table.", 2)
+    return servant
   end
   for k,v in pairs(servant) do
     if not exception or k ~= exception then
