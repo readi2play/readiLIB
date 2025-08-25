@@ -17,6 +17,12 @@ function READI.Helper.string:GetWords(str)
   for word in string.gmatch(str, "%w+") do table.insert(words, word) end
   return words
 end
+function READI.Helper.string:DecapitalizeFirst(str)
+  if type(str) ~= "string" then return "" end
+  local words = READI.Helper.string:GetWords(str)
+  words[1] = words[1]:gsub("^%u", string.lower)
+  return table.concat(words, " ")
+end
 function READI.Helper.string:Capitalize(str)
   if type(str) ~= "string" then return "" end
   local words = READI.Helper.string:GetWords(str)
